@@ -1,0 +1,3 @@
+many_things was called and took 0.01 seconds to complete
+many_things was called and took 0.0 seconds to complete
+many_things was called and took 0.01 seconds to complete
