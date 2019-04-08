@@ -1,7 +1,9 @@
 import time
+from functools import wraps
 
 def accepts(*allowed_type):
     def accepter(func):
+        @wraps(func)
         def decorated(*args, **kwargs):
             for index, argument in enumerate(args):
                 if not isinstance(argument, allowed_type[index]):
@@ -17,11 +19,11 @@ def say_hello(name):
 @accepts(str, int)
 def deposit(name, money):
     print("{} sends {} $!".format(name, money))
-    return True
 
 
 def encrypt(key):
     def accepter(func):
+        @wraps(func)
         def decorated(*args, **kwargs):
             message = func(*args, **kwargs)
             encrypted_message = ''
@@ -49,21 +51,23 @@ def get_low():
 
 def log(file_name):
     def accepter(func):
-        method_name = func.__name__
+        @wraps(func)
         def decorated(*args, **kwargs):
             with open(file_name, 'a+') as log_file:
-                str_log = '{} was called at {}\n'.format(method_name, time.asctime())
+                str_log = '{} was called at {}\n'.format(func.__name__, time.asctime())
                 log_file.write(str_log)
         return decorated
     return accepter
 
 @log('log.txt')
-def get_low():
+@encrypt(2)
+def get_low1():
     return 'Get get get low'
 
 
 def performance(file_name):
     def accepter(func):
+        @wraps(func)
         def decorated(*args, **kwargs):
             with open(file_name, 'a+') as log_file:
                 start = time.time()
@@ -76,5 +80,10 @@ def performance(file_name):
     return accepter
 
 @performance('performance.txt')
-def get_low():
-    return 'Get get get low'
+def many_things():
+    for i in range(100000):
+        a = 2
+
+if __name__ == '__main__':
+    get_low()
+    many_things()
