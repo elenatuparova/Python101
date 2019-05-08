@@ -1,9 +1,8 @@
-import re
-import os.path
+import re, os.path, json
 from math import floor
-import json
 from random import shuffle
 
+DIRECTORY = '/home/osboxes/Documents/PythonProjects/playlist-data/'
 
 class Jsonable:
     def to_json(self):
@@ -141,8 +140,7 @@ class Playlist(Jsonable):
             if char == ' ':
                 char = '-'
         file_name_str = ''.join(file_name) + '.json'
-        directory = '/home/osboxes/Documents/PythonProjects/playlist-data/'
-        complete_file_name = os.path.join(directory, file_name_str)
+        complete_file_name = os.path.join(DIRECTORY, file_name_str)
 
         json_content_str = self.to_json()
         json_dict = json.loads(json_content_str)
@@ -152,8 +150,7 @@ class Playlist(Jsonable):
 
     @staticmethod
     def load(path):
-        directory = '/home/osboxes/Documents/PythonProjects/playlist-data/'
-        complete_path = directory + path
+        complete_path = DIRECTORY + path
         with open(complete_path) as json_file:
             playlist_dict = json.load(json_file)['dict']
         new_playlist = Playlist(playlist_dict['name'])
